@@ -224,6 +224,8 @@ Use [**PowerShell-Desktop-Shortcut-Creator**](https://github.com/2civics/PowerSh
 
 Setting up a Windows Scheduled Task ensures `Asus_DNS_Watchdog.ps1` runs automatically after your PC boots or you sign in—immediately restoring `/jffs/dns_watchdog.sh`, the `cru` cron job, and all DNS redirect rules if a router firmware update or power outage cleared them.
 
+> **Why a 1-Minute Delay Matters:** Windows often reaches the desktop before an ASUS router finishes initializing its network interfaces and SSH service (`dropbear`) after a reboot or power outage. Delaying the task by **1 full minute (`PT1M`)** ensures both Windows networking and the router's SSH daemon are ready to connect.
+
 ### Option 1: Create the Scheduled Task via PowerShell
 
 Run the following in an **Administrator** PowerShell window (update `$ScriptPath` to match your script location):
@@ -236,9 +238,9 @@ $Action = New-ScheduledTaskAction `
     -Execute "conhost.exe" `
     -Argument "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$ScriptPath`""
 
-# Run at user logon with a 45-second delay so Wi-Fi/Ethernet and router SSH are online
+# Delay 1 full minute (PT1M) so Wi-Fi/Ethernet and router SSH are online
 $Trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
-$Trigger.Delay = "PT45S"
+$Trigger.Delay = "PT1M"
 
 $Settings = New-ScheduledTaskSettingsSet `
     -AllowStartIfOnBatteries `
@@ -266,7 +268,7 @@ Register-ScheduledTask `
    * Select **Run only when user is logged on** *(required so the WPF GUI can render on your desktop)*.
 4. **Triggers tab:**
    * Click **New...** → set **Begin the task** to **At log on**.
-   * Check **Delay task for:** and set it to **30 seconds** or **1 minute** so your network adapter has an IP address before SSH runs.
+   * Check **Delay task for:** and set it to **1 minute** so your network adapter and router SSH service are ready before the script runs.
    * Click **OK**.
 5. **Actions tab:**
    * Click **New...** → set **Action** to **Start a program**.

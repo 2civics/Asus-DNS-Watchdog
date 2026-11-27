@@ -10,6 +10,8 @@
 
 A dark-mode Windows WPF GUI that audits, deploys, and self-heals a persistent `iptables` Port 53 DNS redirect watchdog on ASUS routers over SSH—serving as a drop-in replacement for the missing **DNS Director** feature on stock ASUSWRT routers such as the **ASUS ZenWiFi XT8 v2**.
 
+<img width="766" height="509" alt="Screenshot 2026-11-26 081759" src="https://github.com/user-attachments/assets/11b55303-2f07-4d56-a8ca-d72e540ff47f" />
+
 ## How & Why This Replaces Missing DNS Director
 
 ### The Problem on Stock ASUSWRT Routers
